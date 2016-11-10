@@ -1,5 +1,7 @@
 ﻿using System;
+using System.Linq;
 using System.Threading.Tasks;
+using JTWAuthServer.Common;
 using JTWAuthServer.Data;
 using Microsoft.EntityFrameworkCore;
 
@@ -25,6 +27,13 @@ namespace JTWAuthServer.Services {
 
         public async Task<JWTClient> GetClientByAccessTokenAsync(string accessToken) {
             return await _context.Set<JWTClient>().FirstOrDefaultAsync(t => t.LastAccessToken == accessToken);
+        }
+
+        public async Task<Paged<JWTClient>> GetPagedClientAsync(int pageSize, int pageIndex) {
+            var query = _context.Set<JWTClient>();
+            var totalCount = await query.CountAsync();
+            var list = await query.Skip(pageIndex * pageSize).Take(pageSize).ToListAsync();
+            return new Paged<JWTClient>(list, totalCount);
         }
 
         public async Task UpdateClientAsync(JWTClient client) {

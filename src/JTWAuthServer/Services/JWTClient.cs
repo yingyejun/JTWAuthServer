@@ -3,15 +3,22 @@ using System.ComponentModel.DataAnnotations;
 
 namespace JTWAuthServer.Services {
     /// <summary>
-    /// 表示基于JWT授权应用的数据模型,这里仅添加了必要的数据
+    /// 表示基于JWT授权客户的数据模型,仅添加了必要的数据
     /// </summary>
     // ReSharper disable once InconsistentNaming
     public class JWTClient {
         /// <summary>
-        /// 企业Id
+        /// Id
         /// </summary>
         [Key]
         public Guid Id {
+            get; set;
+        }
+        /// <summary>
+        /// 客户端名称
+        /// </summary>
+        [Required]
+        public string Name {
             get; set;
         }
         /// <summary>

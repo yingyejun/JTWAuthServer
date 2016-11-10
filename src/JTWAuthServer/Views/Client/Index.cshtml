@@ -1,0 +1,42 @@
+﻿@{
+    ViewData["Title"] = "Home Page";
+}
+<link href="~/css/simplePagination.min.css" rel="stylesheet" />
+<link href="~/lib/jquery-colorbox/example4/colorbox.css" rel="stylesheet" />
+<div ng-controller="ClientManageController">
+    <div>
+        <a class="btn btn-default" popup data-href="@Url.Action("Edit")">
+            <i class="glyphicon glyphicon-plus"></i> 创建客户端
+        </a>
+    </div>
+    <div>
+        <table class="table table-responsive table-bordered table-striped table-hover">
+            <colgroup></colgroup>
+            <thead>
+                <tr>
+                    <th>选择</th>
+                    <th>名称</th>
+                    <th>AppId</th>
+                    <th>AppSerct</th>
+                    <th>是否启用</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr ng-repeat="item in pagedItems">
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                </tr>
+            </tbody>
+        </table>
+        <div class="simple-pagination" style="height: 40px"></div>
+    </div>
+</div>
+@section scripts
+{
+    <script src="~/js/simplePagination.min.js"></script>
+    <script src="~/lib/jquery-colorbox/jquery.colorbox-min.js"></script>
+
+}

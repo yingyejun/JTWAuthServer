@@ -19,7 +19,8 @@ namespace JTWAuthServer.Migrations
                     Enabled = table.Column<bool>(nullable: false),
                     LastAccessToken = table.Column<string>(nullable: true),
                     LastModifiedOnDate = table.Column<DateTime>(nullable: true),
-                    LastRefreshToken = table.Column<string>(nullable: true)
+                    LastRefreshToken = table.Column<string>(nullable: true),
+                    Name = table.Column<string>(nullable: false)
                 },
                 constraints: table =>
                 {

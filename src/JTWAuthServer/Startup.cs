@@ -16,11 +16,11 @@ namespace JTWAuthServer {
                 .AddEnvironmentVariables();
             Configuration = builder.Build();
 
-//            using (var context = new JWTAuthDbContext()) {
-//                
-//                context.Database.EnsureCreated();
-//                context.Database.Migrate();
-//            }
+            //            using (var context = new JWTAuthDbContext()) {
+            //                
+            //                context.Database.EnsureCreated();
+            //                context.Database.Migrate();
+            //            }
         }
 
         public IConfigurationRoot Configuration {
@@ -32,7 +32,7 @@ namespace JTWAuthServer {
             services.AddEntityFrameworkSqlite()
                     .AddDbContext<JWTAuthDbContext>();
 
-
+            services.AddJWTAuth();
             // Add framework services.
             services.AddMvc();
         }
@@ -50,11 +50,11 @@ namespace JTWAuthServer {
             }
 
             app.UseStaticFiles();
-
+            app.UseJWTAuth();
             app.UseMvc(routes => {
                 routes.MapRoute(
                     name: "default",
-                    template: "{controller=Home}/{action=Index}/{id?}");
+                    template: "{controller=Client}/{action=Index}/{id?}");
             });
         }
     }

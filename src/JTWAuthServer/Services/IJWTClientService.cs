@@ -1,4 +1,6 @@
-﻿using System.Threading.Tasks;
+﻿using System.Collections.Generic;
+using System.Threading.Tasks;
+using JTWAuthServer.Common;
 
 namespace JTWAuthServer.Services {
     // ReSharper disable once InconsistentNaming
@@ -13,6 +15,8 @@ namespace JTWAuthServer.Services {
         Task CreateClientAsync(JWTClient client);
 
         Task<JWTClient> GetClientByAccessTokenAsync(string accessToken);
+
+        Task<Paged<JWTClient>> GetPagedClientAsync(int pageSize, int pageIndex);
     }
 
 }

@@ -8,7 +8,7 @@ using JTWAuthServer.Data;
 namespace JTWAuthServer.Migrations
 {
     [DbContext(typeof(JWTAuthDbContext))]
-    [Migration("20161109104635_Init")]
+    [Migration("20161110094822_Init")]
     partial class Init
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -16,7 +16,7 @@ namespace JTWAuthServer.Migrations
             modelBuilder
                 .HasAnnotation("ProductVersion", "1.0.1");
 
-            modelBuilder.Entity("JTWAuthServer.Services.JWTApplication", b =>
+            modelBuilder.Entity("JTWAuthServer.Services.JWTClient", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd();
@@ -36,6 +36,9 @@ namespace JTWAuthServer.Migrations
                     b.Property<DateTime?>("LastModifiedOnDate");
 
                     b.Property<string>("LastRefreshToken");
+
+                    b.Property<string>("Name")
+                        .IsRequired();
 
                     b.HasKey("Id");
 

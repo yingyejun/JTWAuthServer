@@ -1,0 +1,63 @@
+﻿@{
+    ViewData["Title"] = "编辑";
+    Layout = "_Popup";
+}
+<div ng-controller="ClientDetailController">
+    <div class="form-horizontal" ng-form="theForm">
+        <div class="form-group">
+            <div class="col-xs-2 text-right">
+                <label class="control-label">客户端名称</label>
+            </div>
+            <div class="col-xs-4">
+                <input type="text" name="Name" ng-model="model.Name"
+                       class="form-control"
+                       required="required"
+                       placeholder="请填写客户端名称"
+                       maxlength="200" />
+            </div>
+            <div class="col-xs-3">
+                <div ng-show="theForm.Name.$error.required" class="alert alert-danger">
+                    <i class="iconfont">&#xe627;</i>客户端名称
+                </div>
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="col-xs-2 text-right">
+                <label class="control-label">AppId</label>
+            </div>
+            <div class="col-xs-4">
+                <input type="text" name="AppId" ng-model="model.AppId"
+                       class="form-control"
+                       required="required"
+                       placeholder="请填写AppId" />
+            </div>
+            <div class="col-xs-3">
+                <div ng-show="theForm.AppId.$error.required" class="alert alert-danger">
+                    <i class="iconfont">&#xe627;</i>AppId必须填写
+                </div>
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="col-xs-2 text-right">
+                <label class="control-label">AppSecret</label>
+            </div>
+            <div class="col-xs-4">
+                <input type="text" name="AppSecret" ng-model="model.AppSecret"
+                       class="form-control"
+                       required="required"
+                       placeholder="请填写AppSecret" />
+            </div>
+            <div class="col-xs-3">
+                <div ng-show="theForm.AppSecret.$error.required" class="alert alert-danger">
+                    <i class="iconfont">&#xe627;</i>AppSecret必须填写
+                </div>
+            </div>
+        </div>
+        <div class="text-right form-button-panel">
+            <a class="btn btn-primary" id="btnSave" ng-click="update()" ng-disabled="theForm.$invalid">
+                保存
+            </a>
+        </div>
+    </div>
+
+</div>

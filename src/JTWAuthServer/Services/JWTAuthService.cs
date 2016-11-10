@@ -5,7 +5,6 @@ using JTWAuthServer.Common.Utilities;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
 
 namespace JTWAuthServer.Services {
 
@@ -117,27 +116,31 @@ namespace JTWAuthServer.Services {
                     return Result.Fail<bool>(501, JWTContansts.Errors.Code501);
                 }
 
-                var info = JsonConvert.DeserializeObject<JObject>(EncryptionUtils.DecodeBase64(parts[0]));
+                var info = JsonConvert.DeserializeObject<TokenInfo>(EncryptionUtils.DecodeBase64(parts[0]));
 
-                var timestamp = info.Value<int>("ts");
-
-                var application = await _applicationService.GetClientByAccessTokenAsync(accessToken);
-
+                var timestamp = info.TimeStamp;
                 //无效的访问凭据
-                if (application == null) {
+                if (info.TimeStamp == null) {
                     return Result.Fail<bool>(501, JWTContansts.Errors.Code501);
                 }
-                //如果账号停用
-                if (!application.Enabled) {
-                    return Result.Fail<bool>(402, JWTContansts.Errors.Code402);
-                }
-                //检查时间戳有效性
+                //检查时间戳是否过期
                 var dateTime = ConvertUtils.GetTime(timestamp);
                 if ((DateTime.Now - dateTime).TotalSeconds > JWTContansts.AccessTokenTimeout) {
                     return Result.Fail<bool>(503, JWTContansts.Errors.Code503);
                 }
+                var client = await _applicationService.GetClientByAccessTokenAsync(accessToken);
+
+                //无效的访问凭据
+                if (client == null) {
+                    return Result.Fail<bool>(501, JWTContansts.Errors.Code501);
+                }
+                //如果账号停用
+                if (!client.Enabled) {
+                    return Result.Fail<bool>(402, JWTContansts.Errors.Code402);
+                }
+
                 //检查签名
-                var signature = BuildSignature(application.AppId, application.AppSecret, timestamp);
+                var signature = BuildSignature(client.AppId, client.AppSecret, timestamp);
 
                 if (signature != parts[1]) {
                     return Result.Fail<bool>(502, JWTContansts.Errors.Code502);
@@ -185,10 +188,10 @@ namespace JTWAuthServer.Services {
             //构建签名信息
             var signature = BuildSignature(appId, appSercet, timestamp);
 
-            //构建明文信息,这里可以加入一些自定义的内部标识,如当前应用id,以便使用的时候可以减少查询次数
-            var info = JsonConvert.SerializeObject(new {
-                id = clientId.ToString("N"),
-                ts = timestamp
+            //构建明文信息,这里可以加入一些自定义的内部标识,如当前应用id
+            var info = JsonConvert.SerializeObject(new TokenInfo {
+                Id = clientId.ToString("N"),
+                TimeStamp = timestamp
             });
             //组合为访问凭据
             return $"{EncryptionUtils.EncodeBase64(info)}.{signature}";
@@ -205,6 +208,16 @@ namespace JTWAuthServer.Services {
             return EncryptionUtils.Md5($"{appId}.{appSercet}", timestamp).ToUpper();
         }
 
+        private class TokenInfo {
+            [JsonProperty("ts")]
+            public int? TimeStamp {
+                get; set;
+            }
+            [JsonProperty("id")]
+            public string Id {
+                get; set;
+            }
+        }
     }
 }
 
